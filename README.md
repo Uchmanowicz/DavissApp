@@ -1,5 +1,5 @@
 # Daviss App
-> Android, Windows and Web application for better management of my life. 
+> Android, Windows and Web application for better daily activities management..
 
 ## Table of contents
 * [General info](#general-info)
@@ -17,12 +17,14 @@ Main purpose of the project is to implement mobile (so far for android) applicat
 Application contains few useful modules, which help in daily activities or just are nice addons.
 
 ## Status
-Project is: **_in progress_** - daily work make progress
+Project is: **_in progress_** - daily work make progress.
+
+>**Project before first release.**
 
 ## Screenshots
-Menu View | Settings View | Depot View
---------- | ------------- | ----------
-<img src="./github/images/ss_menuView.JPG" width="200"> | <img src="./github/images/ss_settingsView.JPG" width="200"> | <img src="./github/images/ss_depotView.JPG" width="200">
+Menu View | Settings View | UserInfo View | Depot View
+--------- | ------------- | ------------- | ----------
+<img src="./docs/images/ss_menuView.JPG" width="200"> | <img src="./docs/images/ss_settingsView.JPG" width="200"> | <img src="./docs/images/ss_settingsViewUser.JPG" width="200"> | <img src="./docs/images/ss_depotView.JPG" width="200">
 
 
 ## Technologies
@@ -39,16 +41,21 @@ Menu View | Settings View | Depot View
   - QML / JavaScript
   - SQL
   - PHP
+* MVC (Model-View-Controller)
+* Hexagonal Architecture
+<img src="./docs/architecture/Architecture.png" width="200" height="100">
+
 
 ## Setup
-#### **WEB**
-Try application without setup with aid of Web Assembler!
+
+#### **Web**
+Try application without setup with the aid of Web Assembler!
 
 _in progress_
 
 #### **Application .exe**
-1. Download build/release.. suitable version
-2. Open DavissApp.exe
+
+_in progress - after first release_
 
 #### **QT Creator**
 1. Download the repository.
@@ -58,9 +65,12 @@ _in progress_
 
 ## Features / TODO
 * [x] Login system to web database.
-* [ ] Depot system for electronic components, modules, screws etc. available at home stock.  
-* [ ] Animeted led matrix module - [project will be available here]()
-* [ ] Alarm clock with automated todo activities (eg. make coffee, open blinds) - [project will be available here]()
+* [ ] Sensor's data presenter (eg. data from smog/temperature/humidity/pressure meter). Data collected from web database by web socket notifications.
+* [ ] Depot system for electronic components, modules, screws, CNC tools etc. available at home stock.  
+  - *[ ] Automatic goods (shapes, colors, barcodes) recognition with the aid of the camera (OpenCV, Machine Learning) - for quick and easy depot's data updating.
+* [ ] Interface to Interactive Dynamic LED Matrix Picture (LivingPicture) - [project will be available here]()
+* [ ] Interface to All-Purpose Coffee Dispenser - [project will be available here]()
+* [ ] Alarm clock with automated TODO morning activities (eg. make coffee, open blinds, prepare sandwich) - [project will be available here]()
 * [ ] Merge future mobile projects into this application.
 
 ## Code Examples

@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>ui/Images/Logo/icon.ico</file>
+        <file>ui/Images/Logo/icon.png</file>
+        <file>ui/Images/Wallpaper/Fire.png</file>
+        <file>ui/Images/Logo/BarLogo.png</file>
+        <file>ui/Images/Logo/IconVector.png</file>
+        <file>ui/Images/Modules/Job/Icon.png</file>
+        <file>ui/Images/Modules/Job/ModuleIcon.png</file>
+    </qresource>
+</RCC>

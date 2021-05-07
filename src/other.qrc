@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>ui/Fonts/MaterialIcons-Regular.ttf</file>
+		<file>ui/iconsMap.js</file>
+		<file>ui/Controllers/UserController.js</file>
+    </qresource>
+</RCC>

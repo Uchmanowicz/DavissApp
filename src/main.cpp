@@ -1,62 +1,81 @@
-#include <QGuiApplication>
-#include <QQmlApplicationEngine>
-#include <QWindow>
-#include <QIcon>
-
-#include <QQmlContext>
-
-#include <controllers/databasecontroller.h>
-#include <controllers/depocontroller.h>
-#include <controllers/settingscontroller.h>
+#include "Application.h"
 
 #include <QDebug>
 
+//void setUpAppCore(QGuiApplication & app)
+//{
+//#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+//    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+//#endif
+
+
+//    app.setWindowIcon(QIcon("qrc:/resources/logo/icon.ico"));
+
+//}
+
+//void setUpAppUI(QGuiApplication & app, QQmlApplicationEngine & qmlEngine, MvcAdapter & MVC)
+//{
+//    const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
+//    QObject::connect(&qmlEngine, &QQmlApplicationEngine::objectCreated,
+//                     &app, [url](QObject *obj, const QUrl &objUrl) {
+//        if (!obj && url == objUrl)
+//            QCoreApplication::exit(-1);
+//    }, Qt::QueuedConnection);
+
+
+//    bool OS_ANDROID, OS_WINDOWS = false;
+
+//#if defined(Q_OS_ANDROID)
+//    OS_ANDROID = true;
+//    OS_WINDOWS = false;
+//#elif defined(Q_OS_WINDOWS)
+//    OS_ANDROID = false;
+//    OS_WINDOWS = true;
+//#else
+//    OS_ANDROID = false;
+//    OS_WINDOWS = false;
+//#endif
+
+//    qmlEngine.rootContext()->setContextProperty("OS_ANDROID", QVariant(OS_ANDROID));
+//    qmlEngine.rootContext()->setContextProperty("OS_WINDOWS", QVariant(OS_WINDOWS));
+
+//    qmlEngine.rootContext()->setContextProperty("MVC", & MVC);
+
+//    qmlEngine.load(url);
+//}
+
+
+
+
 int main(int argc, char *argv[])
 {
+
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+		QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
 
-    QGuiApplication app(argc, argv);
+		Application app(argc, argv);
+		app.init();
 
-    app.setWindowIcon(QIcon("qrc:/resources/logo/icon.ico"));
-
-
-    QQmlApplicationEngine engine;
-
-    const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
-    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
-                     &app, [url](QObject *obj, const QUrl &objUrl) {
-        if (!obj && url == objUrl)
-            QCoreApplication::exit(-1);
-    }, Qt::QueuedConnection);
+//	app.setWindowIcon(QIcon("qrc:/resources/logo/icon.ico"));
 
 
-    DatabaseController dbController;
-    SettingsController settingsController(dbController);
+//    QGuiApplication app(argc, argv);
 
-    engine.rootContext()->setContextProperty("dbController", &dbController);
-    engine.rootContext()->setContextProperty("depoController", &dbController.depoController);
-    engine.rootContext()->setContextProperty("treeViewModel", &dbController.depoController.treeViewModel);
-    engine.rootContext()->setContextProperty("settingsController", &settingsController);
+//    setUpAppCore(app);
 
-    bool OS_ANDROID, OS_WINDOWS = false;
+//    Domain domain;
 
-#if defined(Q_OS_ANDROID)
-    OS_ANDROID = true;
-    OS_WINDOWS = false;
-#elif defined(Q_OS_WINDOWS)
-    OS_ANDROID = false;
-    OS_WINDOWS = true;
-#else
-    OS_ANDROID = false;
-    OS_WINDOWS = false;
-#endif
+//    SQLiteAdapter internalDb;
+//    MySqlAdapter externalDb;
 
-    engine.rootContext()->setContextProperty("OS_ANDROID", QVariant(OS_ANDROID));
-    engine.rootContext()->setContextProperty("OS_WINDOWS", QVariant(OS_WINDOWS));
+//    ApplicationLogic applicationLogic(domain, internalDb, externalDb);
 
-    engine.load(url);
+//    MvcAdapter MVC(applicationLogic);
 
-    return app.exec();
+//    QQmlApplicationEngine qmlEngine;
+//    setUpAppUI(app, qmlEngine, MVC);
+
+		//int result = app.exec();
+		return  app.exec();//result;
 }

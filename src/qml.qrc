@@ -1,0 +1,42 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>ui/qtquickcontrols2.conf</file>
+        <file>ui/Modules/Settings/Settings.qml</file>
+        <file>ui/Custom/Button.qml</file>
+        <file>ui/Custom/Icon.qml</file>
+        <file>ui/Custom/String.qml</file>
+        <file>ui/Custom/StringField.qml</file>
+        <file>ui/Custom/TopBarMenu.qml</file>
+        <file>ui/Custom/MenuBoolDelegate.qml</file>
+        <file>ui/Custom/MenuDelegate.qml</file>
+        <file>ui/Custom/MenuOwnerDelegate.qml</file>
+        <file>ui/Custom/MenuSpacerDelegate.qml</file>
+        <file>ui/Custom/MenuStringDelegate.qml</file>
+        <file>ui/Custom/MenuSubViewDelegate.qml</file>
+        <file>ui/Styles/StylesButton.qml</file>
+        <file>ui/Styles/StylesStringField.qml</file>
+        <file>ui/Styles/StylesApp.qml</file>
+        <file>ui/Styles/StylesMenuDelegate.qml</file>
+        <file>ui/Custom/MenuActionDelegate.qml</file>
+        <file>ui/Custom/MenuSwitchDelegate.qml</file>
+        <file>ui/Styles/StylesSwitch.qml</file>
+        <file>ui/Custom/Switch.qml</file>
+        <file>ui/Custom/Avatar.qml</file>
+        <file>ui/Modules/Settings/Appearance/AppearanceMenu.qml</file>
+        <file>ui/Modules/Desktop/Desktop.qml</file>
+        <file>ui/Modules/Desktop/ModuleIcon.qml</file>
+        <file>ui/Custom/CustomBorder.qml</file>
+        <file>ui/Custom/Dialog.qml</file>
+        <file>ui/Modules/Job/HistoryView.qml</file>
+        <file>ui/Modules/Job/MainView.qml</file>
+        <file>ui/Modules/Job/SummaryView.qml</file>
+        <file>ui/Modules/Settings/User/DialogAvatar.qml</file>
+        <file>ui/Modules/Settings/User/DialogName.qml</file>
+        <file>ui/Modules/Settings/User/DialogPassword.qml</file>
+        <file>ui/Modules/Settings/User/LoginView.qml</file>
+        <file>ui/Modules/Settings/User/LoginViewSummary.qml</file>
+        <file>ui/Modules/Settings/User/UserSettings.qml</file>
+        <file>ui/Modules/Settings/Network/NetworkMenu.qml</file>
+    </qresource>
+</RCC>

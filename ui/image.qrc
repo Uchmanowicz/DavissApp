@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/">
+        <file>resources/logo/logo.jpg</file>
+        <file>resources/button/buttBack.png</file>
+        <file>resources/button/buttDelete.png</file>
+        <file>resources/button/buttSearch.png</file>
+        <file>resources/button/buttAdd.png</file>
+        <file>resources/button/buttDoubleArrowWhite.png</file>
+        <file>resources/button/buttSettings.png</file>
+        <file>resources/button/buttDoubleLeftArrowWhite.png</file>
+        <file>resources/button/buttListView.png</file>
+        <file>resources/button/buttTreeView.png</file>
+        <file>resources/logo/fire.png</file>
+        <file>resources/button/buttInfo.png</file>
+    </qresource>
+</RCC>

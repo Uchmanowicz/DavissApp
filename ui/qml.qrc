@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/main.qml</file>
+        <file>qtquickcontrols2.conf</file>
+        <file>qml/view/menu.qml</file>
+        <file>qml/view/depo.qml</file>
+        <file>qml/view/depo_search.qml</file>
+        <file>qml/view/depo_treeView.qml</file>
+        <file>qml/view/settings.qml</file>
+        <file>qml/myComponents/ToolBar_m.qml</file>
+        <file>qml/myComponents/User_m.qml</file>
+        <file>qml/view/settingsInfoView.qml</file>
+    </qresource>
+</RCC>

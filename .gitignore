@@ -1,0 +1,16 @@
+# User config files
+CMakeLists.txt.user
+
+# Build
+/build/*build-DavissApp*
+
+
+# Protected sources
+/src/protector.cpp
+
+# Protected include
+/include/protector.h
+
+
+# WWW files 
+/WWW

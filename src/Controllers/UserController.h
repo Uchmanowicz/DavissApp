@@ -13,12 +13,12 @@
 #include "Resources/DatabaseStatus.h"
 #include "Models/User.h"
 
-class IUserListener
-{
-public:
-	virtual ~IUserListener() {};
-	virtual void onUserChanged(const User &user) = 0;
-};
+// class IUserListener
+//{
+// public:
+//	virtual ~IUserListener() {};
+//	virtual void onUserChanged(const User &user) = 0;
+// };
 
 class UserController : public QObject, public Publisher<IUserListener>, Publisher<ILocalSyncUpdates<User>>, public IUserSync
 {
@@ -31,7 +31,8 @@ public:
 	using Publisher<IUserListener>::addListener;
 	using Publisher<ILocalSyncUpdates<User>>::addListener;
 
-	enum Status {
+	enum Status
+	{
 		OK,
 		WRONG_USER,
 		BLOCKED,
@@ -42,7 +43,7 @@ public:
 	Q_ENUM(Status)
 
 	explicit UserController(const std::shared_ptr<UserManagement> &userManagement_,
-													QObject *parent = nullptr);
+							QObject *parent = nullptr);
 	~UserController();
 
 	void onSynced() override;
@@ -80,10 +81,8 @@ private:
 	void signInGusetUser();
 	void signOutGusetUser();
 	void userBlockedNotification();
+	bool validateUserCredentails(const std::string &correctPass, const std::string &userPass);
 
 	void emitUserChanged();
 	void emitUserStatus(const DBStatus::StatusType &dbStatus, std::function<void(const UserController::Status &)> callback);
-
 };
-
-

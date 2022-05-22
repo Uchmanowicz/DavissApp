@@ -2,10 +2,18 @@
 
 #include <optional>
 #include "Templates/Singleton.h"
+#include "Templates/Publisher.h"
 #include "Models/User.h"
 
-class UserSession : public Singleton<UserSession>
-{   
+class IUserListener
+{
+public:
+	virtual ~IUserListener() {};
+	virtual void onUserChanged(const User &user) = 0;
+};
+
+class UserSession : public Singleton<UserSession>, public Publisher<IUserListener>
+{
 	friend class Singleton<UserSession>;
 
 public:
@@ -21,4 +29,6 @@ private:
 
 	std::optional<User> currentUser;
 	User dummyUser = User();
+
+	void emitUserChanged() const;
 };

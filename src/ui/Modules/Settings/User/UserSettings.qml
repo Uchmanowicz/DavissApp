@@ -16,7 +16,6 @@ Rectangle {
 
         function onUserChanged() {
 //            if(module.readyToUpdate) {
-            console.log("UWAGA ZMIENIAM");
             listModel.prepare();
 //                stackView.replace("qrc:///ui/Modules/Settings/User/UserSettings.qml", StackView.Immediate);
 //            }

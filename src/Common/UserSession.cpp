@@ -12,6 +12,7 @@ const User &UserSession::getUser() const
 void UserSession::setUser(const User &user)
 {
 	currentUser = user;
+	emitUserChanged();
 }
 
 bool UserSession::isActive() const
@@ -22,4 +23,14 @@ bool UserSession::isActive() const
 void UserSession::deActivate()
 {
 	currentUser.reset();
+	emitUserChanged();
+}
+
+void UserSession::emitUserChanged() const
+{
+	for(auto &listener: Publisher<IUserListener>::listeners) {
+		if(!listener.expired()) {
+			listener.lock().get()->onUserChanged(*currentUser);
+		}
+	}
 }

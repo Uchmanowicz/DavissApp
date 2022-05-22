@@ -60,12 +60,14 @@ void UserController::signIn(const QString &login, const QString &password, const
 	if(user.login.isEmpty()) {
 		UserSession::getInstance().setUser(User(login, hashedPassword.c_str(), ""));
 		user = userManager.get()->selectWeb(login.toStdString(), &dbStatus);
-		if(dbStatus == DBStatus::OK) {
+		if(dbStatus == DBStatus::OK && validateUserCredentails(hashedPassword, user.password.toStdString())) {
 			signOutGusetUser();
 			user.isAlwaysLogged = alwaysLogged;
 			currentUser = user;
 			userManager->insert(currentUser, &dbStatus);
 		}
+	} else if(!validateUserCredentails(hashedPassword, user.password.toStdString())) {
+		dbStatus = DBStatus::ERR_USER_WRONG;
 	} else {
 		signOutGusetUser();
 		user.isAlwaysLogged = alwaysLogged;
@@ -234,6 +236,11 @@ void UserController::signOutGusetUser()
 
 void UserController::userBlockedNotification()
 {
+}
+
+bool UserController::validateUserCredentails(const std::string &correctPass, const std::string &userPass)
+{
+	return correctPass == userPass;
 }
 
 void UserController::emitUserChanged()

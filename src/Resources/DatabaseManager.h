@@ -6,6 +6,7 @@
 #include "Managements/AppManagement/AppTable.h"
 #include "Managements/UserManagement/UserTable.h"
 #include "Managements/JobManagement/JobHistoryTable.h"
+#include "Managements/Depot/DepotTable.h"
 #include "Managements/SyncManagement/SyncTable.h"
 
 class DatabaseManager : public QSqlDatabase
@@ -21,5 +22,6 @@ protected:
 	virtual void createAppTable();
 	virtual void createUsersTable();
 	virtual void createJobHistory();
+	virtual void createDepotTable();
 	virtual void createSyncTable();
 };

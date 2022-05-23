@@ -38,5 +38,8 @@
         <file>ui/Modules/Settings/User/LoginViewSummary.qml</file>
         <file>ui/Modules/Settings/User/UserSettings.qml</file>
         <file>ui/Modules/Settings/Network/NetworkMenu.qml</file>
+        <file>ui/Modules/Depot/AddCard.qml</file>
+        <file>ui/Modules/Depot/CategorySelector.qml</file>
+        <file>ui/Modules/Depot/MainView.qml</file>
     </qresource>
 </RCC>

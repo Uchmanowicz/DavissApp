@@ -6,7 +6,7 @@
 #include "Module.h"
 
 class User
-{   
+{
 public:
 	Q_GADGET
 
@@ -31,9 +31,9 @@ public:
 	Q_PROPERTY(bool ui_isGuest READ isGuest);
 
 public:
-	User() {}
+	User() { }
 	User(const QString &login_, const QString &password_, const QString &name_, const UserRole &role = Standard, const bool &isBlocked_ = false, const QString &avatar_ = "", const bool &isAlwaysLogged_ = 0)
-		: login(login_), password(password_), name(name_), userRole(role), isBlocked(isBlocked_), avatar(avatar_), isAlwaysLogged(isAlwaysLogged_) {}
+		: login(login_), password(password_), name(name_), userRole(role), isBlocked(isBlocked_), avatar(avatar_), isAlwaysLogged(isAlwaysLogged_) { }
 
 	QString login = "";
 	QString password = "";
@@ -47,20 +47,24 @@ public:
 
 	QString getUserRole()
 	{
+		QString res = "unknowkn";
+
 		switch(userRole) {
 		case Standard:
-			return "Standard User";
+			res = "Standard User";
 			break;
 		case Guest:
-			return "Guest";
+			res = "Guest";
 			break;
 		case Children:
-			return "Child";
+			res = "Child";
 			break;
 		case Admin:
-			return "Admin";
+			res = "Admin";
 			break;
 		}
+
+		return res;
 	}
 
 	bool isGuest()
@@ -76,23 +80,23 @@ public:
 	bool operator==(const User &other) const
 	{
 		return login == other.login
-				&& password == other.password
-				&& name == other.name
-				&& userRole == other.userRole
-				&& isBlocked == other.isBlocked
-				&& avatar == other.avatar
-				&& isAlwaysLogged == other.isAlwaysLogged;
+			   && password == other.password
+			   && name == other.name
+			   && userRole == other.userRole
+			   && isBlocked == other.isBlocked
+			   && avatar == other.avatar
+			   && isAlwaysLogged == other.isAlwaysLogged;
 	}
 
 	bool operator!=(const User &other) const
 	{
 		return login != other.login
-				|| password != other.password
-				|| name != other.name
-				|| userRole != other.userRole
-				|| isBlocked != other.isBlocked
-				|| avatar != other.avatar
-				|| isAlwaysLogged != other.isAlwaysLogged;
+			   || password != other.password
+			   || name != other.name
+			   || userRole != other.userRole
+			   || isBlocked != other.isBlocked
+			   || avatar != other.avatar
+			   || isAlwaysLogged != other.isAlwaysLogged;
 	}
 };
 Q_DECLARE_METATYPE(User)

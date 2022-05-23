@@ -18,6 +18,7 @@ void Application::init()
 	createUserController();
 	createModulesController();
 	createJobController();
+	createDepotController();
 
 	initUIEngine();
 	assignListeners();
@@ -58,6 +59,7 @@ void Application::createManagers()
 	managementPack.appManager = std::make_shared<AppManagement>(*database);
 	managementPack.userManager = std::make_shared<UserManagement>(*database, webDatabase);
 	managementPack.jobManager = std::make_shared<JobManagement>(localManagement, webManagement);
+	managementPack.depotManager = std::make_shared<Managers::DepotManager>(localManagement, webManagement);
 	//	managementPack.syncManager = std::make_shared<SyncManagement>(*database, webDatabase);
 }
 
@@ -81,12 +83,12 @@ void Application::createModulesController()
 {
 	std::vector<Module> modules;
 	modules.push_back(Module("Job", "Job Timing1", true));
-	modules.push_back(Module("Job", "Job Timing2", true));
-	modules.push_back(Module("Job", "Job Timing3", true));
-	modules.push_back(Module("Job", "Job Timing4", true));
-	modules.push_back(Module("Job", "Job Timing5", true));
-	modules.push_back(Module("Job", "Job Timing6", true));
-	modules.push_back(Module("Job", "Job Timing7", true));
+	modules.push_back(Module("Depot", "Depot", true));
+	//	modules.push_back(Module("Job", "Job Timing3", true));
+	//	modules.push_back(Module("Job", "Job Timing4", true));
+	//	modules.push_back(Module("Job", "Job Timing5", true));
+	//	modules.push_back(Module("Job", "Job Timing6", true));
+	//	modules.push_back(Module("Job", "Job Timing7", true));
 
 	controllerPack.modulesController = std::make_shared<ModulesController>(
 		modules,
@@ -104,9 +106,14 @@ void Application::createJobController()
 {
 	controllerPack.jobController = std::make_shared<JobController>(managementPack.jobManager, this);
 
-	mqmlEngine.rootContext()->setContextProperty(
-		"jobController",
-		controllerPack.jobController.get());
+	mqmlEngine.rootContext()->setContextProperty("jobController", controllerPack.jobController.get());
+}
+
+void Application::createDepotController()
+{
+	controllerPack.depotController = std::make_shared<Controllers::DepotController>(managementPack.depotManager, this);
+
+	mqmlEngine.rootContext()->setContextProperty("depotController", controllerPack.depotController.get());
 }
 
 void Application::initUITypes()
@@ -114,6 +121,10 @@ void Application::initUITypes()
 	qRegisterMetaType<User>("User");
 	qRegisterMetaType<App>("App");
 	qRegisterMetaType<Time>("Time");
+
+	qRegisterMetaType<QVector<Depot::Item>>("QVector<Depot::Item>");
+	qRegisterMetaType<QMap<int, QVector<QString>>>("QMap<int, QVector<QString>>");
+	qRegisterMetaType<QMap<int, QVariantList>>("QMap<int, QVariantList>");
 	//	qRegisterMetaType<User::UserRole>("User::UserRole");
 	//	qRegisterMetaType<UserController::LoginStatus>("UserCOntroller::LoginStatus");
 
@@ -145,6 +156,8 @@ void Application::initUIEngine()
 
 void Application::assignListeners()
 {
+	UserSession::getInstance().addListener(controllerPack.depotController);
+
 	//	controllerPack.appController->addListener(synchronizer);
 
 	//	controllerPack.jobController->addListener(synchronizer);

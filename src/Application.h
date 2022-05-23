@@ -24,6 +24,7 @@
 #include "Controllers/UserController.h"
 #include "Controllers/ModulesController.h"
 #include "Controllers/JobController.h"
+#include "Controllers/Depot/DepotController.h"
 
 //#include "Services/Synchronizer.h"
 
@@ -32,6 +33,8 @@ struct ManagementPack
 	std::shared_ptr<AppManagement> appManager;
 	std::shared_ptr<UserManagement> userManager;
 	std::shared_ptr<JobManagement> jobManager;
+	std::shared_ptr<Managers::DepotManager> depotManager;
+
 	//	std::shared_ptr<SyncManagement> syncManager;
 };
 
@@ -41,6 +44,7 @@ struct ControllerPack
 	std::shared_ptr<UserController> userController;
 	std::shared_ptr<ModulesController> modulesController;
 	std::shared_ptr<JobController> jobController;
+	std::shared_ptr<Controllers::DepotController> depotController;
 };
 
 class Application : public QGuiApplication
@@ -58,6 +62,7 @@ private:
 	void createUserController();
 	void createModulesController();
 	void createJobController();
+	void createDepotController();
 	void createSynchronizer();
 
 	void initUITypes();

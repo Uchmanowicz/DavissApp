@@ -90,6 +90,9 @@ file(GLOB_RECURSE PROJECT_SOURCES
     "${SOURCE_DIR}/Controllers/*.h"
     "${SOURCE_DIR}/Controllers/*.cpp"
 
+    "${SOURCE_DIR}/Parsers/*.h"
+    "${SOURCE_DIR}/Parsers/*.cpp"
+
     "${SOURCE_DIR}/*.cc"
 
     "${ANDROID_DIR}/src/*.jar"

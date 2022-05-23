@@ -59,7 +59,7 @@ Rectangle {
                 onClicked: {
                     switch(index) {
                     case UserSettings.ListIndex.SIGN_OUT_ACTION:
-                        stackView.pop();
+                        app.popView();
                         userController.signOut();
                         break;
 

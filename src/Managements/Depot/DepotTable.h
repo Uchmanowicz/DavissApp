@@ -9,5 +9,5 @@ struct DepotTable final
 	static constexpr char const *AMOUNT = "Amount";
 	static constexpr char const *UNIT = "Unit";
 	static constexpr char const *LOCALIZATION = "Localization";
-	static constexpr char const *DATA = "Data";
+	static constexpr char const *PARAMETERS = "Parameters";
 };

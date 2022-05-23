@@ -3,7 +3,7 @@ import QtQuick 2.15
 Text {
     id: control
     font.pixelSize: 24
-    topPadding: 0
+    topPadding: 2
     bottomPadding: 0
     verticalAlignment: Text.AlignVCenter
     elide: Text.ElideRight

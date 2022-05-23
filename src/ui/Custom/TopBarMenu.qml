@@ -21,7 +21,7 @@ Rectangle {
 
         MouseArea {
             anchors.fill: parent
-            onClicked: stackView.pop(null);
+            onClicked: app.popView(null)
         }
     }
 }

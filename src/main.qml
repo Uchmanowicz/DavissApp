@@ -56,8 +56,17 @@ ApplicationWindow {
     }
 
     Shortcut {
+        id: backShortcut
         sequence: StandardKey.Cancel
-        onActivated: stackView.pop();
+        onActivated: {
+            callback();
+        }
+
+        property var callback: function(){};
+
+        function resetCallback() {
+            callback = function() {stackView.pop();}
+        }
     }
 
     property alias styleApp: styleApp
@@ -75,9 +84,29 @@ ApplicationWindow {
         property bool isDialog: false
     }
 
+    function popView(arg = "") {
+        stackView.pop(arg);
+    }
 
     function hideKeyboard() {
         Qt.inputMethod.hide();
+    }
+
+    function onBackShortcut(callback) {
+        backShortcut.callback = function(){callback();};
+    }
+
+    function resetBackShortcut() {
+        backShortcut.resetCallback();
+    }
+
+    function blockBackShortcut() {
+        backShortcut.enabled = false;
+        console.log(backShortcut.enabled)
+    }
+
+    function unblockBackShortCut() {
+        backShortcut.enabled = true;
     }
 
     Custom.String {

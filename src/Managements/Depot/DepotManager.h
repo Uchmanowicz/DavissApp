@@ -17,28 +17,28 @@ using namespace Depot;
 
 namespace Managers
 {
-	class DepotManager : public CRUDLocalManagement<std::string, Depot::Item>, public CRUDWebManagement<std::string, Depot::Item>
+	class DepotManager : public Templates::CRUDLocalManagement<std::string, Depot::Item>, public Templates::CRUDWebManagement<std::string, Depot::Item>
 	{
 	public:
-		DepotManager(const std::shared_ptr<LocalManagement> &localManagement, const std::shared_ptr<WebManagement> &webManagement); //, const std::shared_ptr<Synchronizer> &synchronizer_);
+		DepotManager(const std::shared_ptr<DB::LocalManagement> &localManagement, const std::shared_ptr<WebManagement> &webManagement); //, const std::shared_ptr<Synchronizer> &synchronizer_);
 		~DepotManager() = default;
 
-		Depot::Item select(const std::string &login, DBStatus::StatusType *status = nullptr) const override;
-		std::vector<Depot::Item> selectAll(DBStatus::StatusType *status = nullptr) const override;
-		bool insert(const Depot::Item &depotItem, DBStatus::StatusType *status = nullptr) override;
-		bool remove(const Depot::Item &depotItem, DBStatus::StatusType *status = nullptr) override;
-		bool removeAll(DBStatus::StatusType *status = nullptr) override;
-		bool update(const Depot::Item &depotItem, DBStatus::StatusType *status = nullptr) override;
+		Depot::Item select(const std::string &login, DB::Status *status = nullptr) const override;
+		std::vector<Depot::Item> selectAll(DB::Status *status = nullptr) const override;
+		bool insert(const Depot::Item &depotItem, DB::Status *status = nullptr) override;
+		bool remove(const Depot::Item &depotItem, DB::Status *status = nullptr) override;
+		bool removeAll(DB::Status *status = nullptr) override;
+		bool update(const Depot::Item &depotItem, DB::Status *status = nullptr) override;
 
-		Depot::Item selectWeb(const std::string &login, DBStatus::StatusType *status = nullptr) const override;
-		std::vector<Depot::Item> selectAllWeb(DBStatus::StatusType *status = nullptr) const override;
-		bool insertWeb(const Depot::Item &depotItem, DBStatus::StatusType *status = nullptr) override;
-		bool removeWeb(const Depot::Item &depotItem, DBStatus::StatusType *status = nullptr) override;
-		bool removeAllWeb(DBStatus::StatusType *status = nullptr) override;
-		bool updateWeb(const Depot::Item &depotItem, DBStatus::StatusType *status = nullptr) override;
+		Depot::Item selectWeb(const std::string &login, DB::Status *status = nullptr) const override;
+		std::vector<Depot::Item> selectAllWeb(DB::Status *status = nullptr) const override;
+		bool insertWeb(const Depot::Item &depotItem, DB::Status *status = nullptr) override;
+		bool removeWeb(const Depot::Item &depotItem, DB::Status *status = nullptr) override;
+		bool removeAllWeb(DB::Status *status = nullptr) override;
+		bool updateWeb(const Depot::Item &depotItem, DB::Status *status = nullptr) override;
 
 	private:
-		std::shared_ptr<LocalManagement> m_localManager;
+		std::shared_ptr<DB::LocalManagement> m_localManager;
 		std::shared_ptr<WebManagement> m_webManager;
 		//	std::shared_ptr<Synchronizer> m_synchronizer;
 

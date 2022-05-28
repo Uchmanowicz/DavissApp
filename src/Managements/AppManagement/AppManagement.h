@@ -10,21 +10,24 @@
 #include "Models/App.h"
 #include "AppTable.h"
 
-class AppManagement : public CRUDLocalManagement<std::string, App>
+namespace Managers
 {
-public:
-	AppManagement(const QSqlDatabase &database);
-	~AppManagement();
+	class AppManagement : public Templates::CRUDLocalManagement<std::string, App::Settings>
+	{
+	public:
+		AppManagement(const QSqlDatabase &database);
+		~AppManagement();
 
-	App select(const std::string &app, DBStatus::StatusType *status = nullptr) const override;
-	std::vector<App> selectAll(DBStatus::StatusType *status = nullptr) const override;
-	bool insert(const App &app, DBStatus::StatusType *status = nullptr) override;
-	bool remove(const App &app, DBStatus::StatusType *status = nullptr) override;
-	bool removeAll(DBStatus::StatusType *status = nullptr) override;
-	bool update(const App &app, DBStatus::StatusType *status = nullptr) override;
+		App::Settings select(const std::string &app, DB::Status *status = nullptr) const override;
+		std::vector<App::Settings> selectAll(DB::Status *status = nullptr) const override;
+		bool insert(const App::Settings &app, DB::Status *status = nullptr) override;
+		bool remove(const App::Settings &app, DB::Status *status = nullptr) override;
+		bool removeAll(DB::Status *status = nullptr) override;
+		bool update(const App::Settings &app, DB::Status *status = nullptr) override;
 
-private:
-	LocalManagement m_localManager;
+	private:
+		DB::LocalManagement m_localManager;
 
-	static App fetchFromRecord(const QSqlRecord &record);
-};
+		static App::Settings fetchFromRecord(const QSqlRecord &record);
+	};
+}

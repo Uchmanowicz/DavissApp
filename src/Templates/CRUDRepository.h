@@ -9,24 +9,25 @@
 #include "Templates/QueryRespository.h"
 #include "Resources/DatabaseStatus.h"
 
-class CRUDLocalRepository
-{   
-public:
-	CRUDLocalRepository() = default;
-	virtual ~CRUDLocalRepository() = default;
-	virtual QSqlRecord getRecord(const Query &query, DBStatus::StatusType *status = nullptr) const = 0;
-	virtual std::vector<QSqlRecord> getRecords(const Query &query, DBStatus::StatusType *status = nullptr) const = 0;
-	virtual bool execQuery(const Query &query, DBStatus::StatusType *status = nullptr) const = 0;
-};
-
-class CRUDWebRepository
+namespace Templates
 {
-public:
-	CRUDWebRepository() = default;
-	virtual ~CRUDWebRepository() = default;
-	virtual QJsonObject getRecord(const Query &query, DBStatus::StatusType *status = nullptr) const = 0;
-	virtual std::vector<QJsonObject> getRecords(const Query &query, DBStatus::StatusType *status = nullptr) const = 0;
-	virtual bool execQuery(const Query &query, DBStatus::StatusType *status = nullptr) const = 0;
-};
+	class CRUDLocalRepository
+	{
+	public:
+		CRUDLocalRepository() = default;
+		virtual ~CRUDLocalRepository() = default;
+		virtual QSqlRecord getRecord(const DB::Query &query, DB::Status *status = nullptr) const = 0;
+		virtual std::vector<QSqlRecord> getRecords(const DB::Query &query, DB::Status *status = nullptr) const = 0;
+		virtual bool execQuery(const DB::Query &query, DB::Status *status = nullptr) const = 0;
+	};
 
-
+	class CRUDWebRepository
+	{
+	public:
+		CRUDWebRepository() = default;
+		virtual ~CRUDWebRepository() = default;
+		virtual QJsonObject getRecord(const DB::Query &query, DB::Status *status = nullptr) const = 0;
+		virtual std::vector<QJsonObject> getRecords(const DB::Query &query, DB::Status *status = nullptr) const = 0;
+		virtual bool execQuery(const DB::Query &query, DB::Status *status = nullptr) const = 0;
+	};
+}

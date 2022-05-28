@@ -5,12 +5,13 @@
 #include "Models/User.h"
 #include "Controllers/AppController.h"
 
-struct SynchronizerListenerList : public IAppListener, public ILocalSyncUpdates<JobHistory>, public ILocalSyncUpdates<User>
+namespace Sync
 {
-	virtual ~SynchronizerListenerList() {};
-	virtual void onAppChanged(const App &app) = 0;
-	virtual void onLocalUpdates(const JobHistory &jobHistory) = 0;
-	virtual void onLocalUpdates(const User &user) = 0;
-};
-
-
+	struct SynchronizerListenerList : public Listeners::IAppListener, public Listeners::ILocalSyncUpdates<Job::JobHistory>, public Listeners::ILocalSyncUpdates<Person::User>
+	{
+		virtual ~SynchronizerListenerList() {};
+		virtual void onAppChanged(const App::Settings &app) = 0;
+		virtual void onLocalUpdates(const Job::JobHistory &jobHistory) = 0;
+		virtual void onLocalUpdates(const Person::User &user) = 0;
+	};
+}

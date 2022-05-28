@@ -1,181 +1,186 @@
 #include "SyncManagement.h"
 
-SyncManagement::SyncManagement(const QSqlDatabase &database, const std::shared_ptr<WebDatabaseManager> &databaseWeb)
-	: m_localManager(database), m_webManager(databaseWeb)
+using namespace Person;
+
+namespace Managers
 {
-}
-
-SyncManagement::~SyncManagement()
-{
-}
-
-Sync SyncManagement::select(const std::string &login, DBStatus::StatusType *status) const
-{
-	Query query;
-	query.query = QString("SELECT * FROM %1 WHERE %2 = '%3';")
-					  .arg(SyncTable::TABLE_NAME, SyncTable::LOGIN, login.c_str())
-					  .toStdString();
-
-	auto reply = m_localManager.getRecord(query, status);
-
-	if(!reply.isEmpty()) {
-		return fetchFromRecord(reply);
+	SyncManagement::SyncManagement(const QSqlDatabase &database, const std::shared_ptr<DB::IWebDbExecutor> &databaseWeb)
+		: m_localManager(database), m_webManager(databaseWeb)
+	{
 	}
 
-	return Sync();
-}
-
-std::vector<Sync> SyncManagement::selectAll(DBStatus::StatusType *status) const
-{
-	Query query;
-	query.query = QString("SELECT * FROM %1 WHERE %2 = '%3';")
-					  .arg(SyncTable::TABLE_NAME, SyncTable::LOGIN, UserSession::getInstance().getUser().login)
-					  .toStdString();
-
-	auto reply = m_localManager.getRecords(query, status);
-
-	std::vector<Sync> syncs;
-	for(const auto &sync: reply) {
-		syncs.push_back(fetchFromRecord(sync));
+	SyncManagement::~SyncManagement()
+	{
 	}
 
-	return syncs;
-}
+	Sync::Entities SyncManagement::select(const std::string &login, DB::Status *status) const
+	{
+		DB::Query query;
+		query.query = QString("SELECT * FROM %1 WHERE %2 = '%3';")
+						  .arg(Sync::SyncTable::TABLE_NAME, Sync::SyncTable::LOGIN, login.c_str())
+						  .toStdString();
 
-bool SyncManagement::insert(const Sync &localSync, DBStatus::StatusType *status)
-{
-	Query query;
-	query.query = QString("INSERT INTO %1(%2, %3, %4) VALUES('%5', '%6', '%7');")
-					  .arg(SyncTable::TABLE_NAME, SyncTable::LOGIN, SyncTable::USER_SYNC, SyncTable::JOB_SYNC, UserSession::getInstance().getUser().login, QString::number(localSync.userSync), QString::number(localSync.jobSync))
-					  .toStdString();
+		auto reply = m_localManager.getRecord(query, status);
 
-	return m_localManager.execQuery(query, status);
-}
+		if(!reply.isEmpty()) {
+			return fetchFromRecord(reply);
+		}
 
-bool SyncManagement::remove(const Sync &sync, DBStatus::StatusType *status)
-{
-	Query query;
-	query.query = QString("DELETE FROM %1 WHERE %2 = '%3';")
-					  .arg(SyncTable::TABLE_NAME, SyncTable::LOGIN, UserSession::getInstance().getUser().login)
-					  .toStdString();
-
-	return m_localManager.execQuery(query, status);
-}
-
-bool SyncManagement::removeAll(DBStatus::StatusType *status)
-{
-	Query query;
-	query.query = QString("DELETE FROM %1;")
-					  .arg(SyncTable::TABLE_NAME)
-					  .toStdString();
-
-	return m_localManager.execQuery(query, status);
-}
-
-bool SyncManagement::update(const Sync &sync, DBStatus::StatusType *status)
-{
-	auto existRecord = select(UserSession::getInstance().getUser().login.toStdString(), status);
-
-	if(existRecord == Sync()) {
-		return insert(sync, status);
+		return {};
 	}
 
-	Query query;
-	query.query = QString("UPDATE %1 SET %2='%3', %4='%5' WHERE %6='%7';")
-					  .arg(SyncTable::TABLE_NAME, SyncTable::USER_SYNC, QString::number(sync.userSync), SyncTable::JOB_SYNC, QString::number(sync.jobSync), SyncTable::LOGIN, UserSession::getInstance().getUser().login)
-					  .toStdString();
+	std::vector<Sync::Entities> SyncManagement::selectAll(DB::Status *status) const
+	{
+		DB::Query query;
+		query.query = QString("SELECT * FROM %1 WHERE %2 = '%3';")
+						  .arg(Sync::SyncTable::TABLE_NAME, Sync::SyncTable::LOGIN, UserSession::getInstance().getUser().login)
+						  .toStdString();
 
-	return m_localManager.execQuery(query, status);
-	;
-}
+		auto reply = m_localManager.getRecords(query, status);
 
-Sync SyncManagement::selectWeb(const std::string &login, DBStatus::StatusType *status) const
-{
-	Query query;
-	query.query = QString("/%1/%2").arg(SyncTable::TABLE_NAME, UserSession::getInstance().getUser().login).toStdString();
+		std::vector<Sync::Entities> syncs;
+		for(const auto &sync: reply) {
+			syncs.push_back(fetchFromRecord(sync));
+		}
 
-	auto reply = m_webManager.getRecord(query, status);
-
-	if(!reply.empty()) {
-		return fetchFromRecordWeb(reply);
+		return syncs;
 	}
 
-	return Sync();
-}
+	bool SyncManagement::insert(const Sync::Entities &localSync, DB::Status *status)
+	{
+		DB::Query query;
+		query.query = QString("INSERT INTO %1(%2, %3, %4) VALUES('%5', '%6', '%7');")
+						  .arg(Sync::SyncTable::TABLE_NAME, Sync::SyncTable::LOGIN, Sync::SyncTable::USER_SYNC, Sync::SyncTable::JOB_SYNC, UserSession::getInstance().getUser().login, QString::number(localSync.userSync), QString::number(localSync.jobSync))
+						  .toStdString();
 
-std::vector<Sync> SyncManagement::selectAllWeb(DBStatus::StatusType *status) const
-{
-	Query query;
-	query.query = QString("/%1?filter=%2,eq,%3").arg(SyncTable::TABLE_NAME, SyncTable::LOGIN, UserSession::getInstance().getUser().login).toStdString();
-
-	auto reply = m_webManager.getRecords(query, status);
-
-	std::vector<Sync> syncs;
-	for(auto const &syncObj: reply) {
-		syncs.push_back(fetchFromRecordWeb(syncObj));
+		return m_localManager.execQuery(query, status);
 	}
 
-	return syncs;
-}
+	bool SyncManagement::remove(const Sync::Entities &sync, DB::Status *status)
+	{
+		DB::Query query;
+		query.query = QString("DELETE FROM %1 WHERE %2 = '%3';")
+						  .arg(Sync::SyncTable::TABLE_NAME, Sync::SyncTable::LOGIN, UserSession::getInstance().getUser().login)
+						  .toStdString();
 
-bool SyncManagement::insertWeb(const Sync &webSync, DBStatus::StatusType *status)
-{
-	Query query;
-	query.query = QString("/%1").arg(SyncTable::TABLE_NAME).toStdString();
-	query.body = fetchToJsonWeb(webSync);
+		return m_localManager.execQuery(query, status);
+	}
 
-	return m_webManager.execQuery(query, status);
-}
+	bool SyncManagement::removeAll(DB::Status *status)
+	{
+		DB::Query query;
+		query.query = QString("DELETE FROM %1;")
+						  .arg(Sync::SyncTable::TABLE_NAME)
+						  .toStdString();
 
-bool SyncManagement::removeWeb(const Sync &webSync, DBStatus::StatusType *status)
-{
-	Query query;
-	query.query = QString("/%1/%2").arg(SyncTable::TABLE_NAME, UserSession::getInstance().getUser().login).toStdString();
+		return m_localManager.execQuery(query, status);
+	}
 
-	return m_webManager.execQuery(query, status);
-}
+	bool SyncManagement::update(const Sync::Entities &sync, DB::Status *status)
+	{
+		auto existRecord = select(UserSession::getInstance().getUser().login.toStdString(), status);
 
-bool SyncManagement::removeAllWeb(DBStatus::StatusType *status)
-{
-	Query query;
-	query.query = QString("/%1?filter=%2,eq,%3").arg(SyncTable::TABLE_NAME, SyncTable::LOGIN, UserSession::getInstance().getUser().login).toStdString();
+		if(existRecord == Sync::Entities()) {
+			return insert(sync, status);
+		}
 
-	return m_webManager.execQuery(query, status);
-}
+		DB::Query query;
+		query.query = QString("UPDATE %1 SET %2='%3', %4='%5' WHERE %6='%7';")
+						  .arg(Sync::SyncTable::TABLE_NAME, Sync::SyncTable::USER_SYNC, QString::number(sync.userSync), Sync::SyncTable::JOB_SYNC, QString::number(sync.jobSync), Sync::SyncTable::LOGIN, UserSession::getInstance().getUser().login)
+						  .toStdString();
 
-bool SyncManagement::updateWeb(const Sync &sync, DBStatus::StatusType *status)
-{
-	Query query;
-	query.query = QString("/%1/%2").arg(SyncTable::TABLE_NAME, UserSession::getInstance().getUser().login).toStdString();
-	query.body = fetchToJsonWeb(sync);
+		return m_localManager.execQuery(query, status);
+		;
+	}
 
-	return m_webManager.execQuery(query, status);
-}
+	Sync::Entities SyncManagement::selectWeb(const std::string &login, DB::Status *status) const
+	{
+		DB::Query query;
+		query.query = QString("/%1/%2").arg(Sync::SyncTable::TABLE_NAME, UserSession::getInstance().getUser().login).toStdString();
 
-Sync SyncManagement::fetchFromRecord(const QSqlRecord &record)
-{
-	Sync sync;
-	sync.userSync = record.field(SyncTable::USER_SYNC).value().toLongLong();
-	sync.jobSync = record.field(SyncTable::JOB_SYNC).value().toLongLong();
+		auto reply = m_webManager.getRecord(query, status);
 
-	return sync;
-}
+		if(!reply.empty()) {
+			return fetchFromRecordWeb(reply);
+		}
 
-Sync SyncManagement::fetchFromRecordWeb(const QJsonObject &records)
-{
-	Sync sync;
-	sync.userSync = static_cast<long long>(records[SyncTable::USER_SYNC].toDouble());
-	sync.jobSync = static_cast<long long>(records[SyncTable::JOB_SYNC].toDouble());
+		return {};
+	}
 
-	return sync;
-}
+	std::vector<Sync::Entities> SyncManagement::selectAllWeb(DB::Status *status) const
+	{
+		DB::Query query;
+		query.query = QString("/%1?filter=%2,eq,%3").arg(Sync::SyncTable::TABLE_NAME, Sync::SyncTable::LOGIN, UserSession::getInstance().getUser().login).toStdString();
 
-std::string SyncManagement::fetchToJsonWeb(const Sync &sync)
-{
-	QJsonObject obj;
-	obj.insert(SyncTable::USER_SYNC, sync.userSync);
-	obj.insert(SyncTable::JOB_SYNC, sync.jobSync);
-	QJsonDocument doc(obj);
+		auto reply = m_webManager.getRecords(query, status);
 
-	return doc.toJson(QJsonDocument::Compact).toStdString();
+		std::vector<Sync::Entities> syncs;
+		for(auto const &syncObj: reply) {
+			syncs.push_back(fetchFromRecordWeb(syncObj));
+		}
+
+		return syncs;
+	}
+
+	bool SyncManagement::insertWeb(const Sync::Entities &webSync, DB::Status *status)
+	{
+		DB::Query query;
+		query.query = QString("/%1").arg(Sync::SyncTable::TABLE_NAME).toStdString();
+		query.body = fetchToJsonWeb(webSync);
+
+		return m_webManager.execQuery(query, status);
+	}
+
+	bool SyncManagement::removeWeb(const Sync::Entities &webSync, DB::Status *status)
+	{
+		DB::Query query;
+		query.query = QString("/%1/%2").arg(Sync::SyncTable::TABLE_NAME, UserSession::getInstance().getUser().login).toStdString();
+
+		return m_webManager.execQuery(query, status);
+	}
+
+	bool SyncManagement::removeAllWeb(DB::Status *status)
+	{
+		DB::Query query;
+		query.query = QString("/%1?filter=%2,eq,%3").arg(Sync::SyncTable::TABLE_NAME, Sync::SyncTable::LOGIN, UserSession::getInstance().getUser().login).toStdString();
+
+		return m_webManager.execQuery(query, status);
+	}
+
+	bool SyncManagement::updateWeb(const Sync::Entities &sync, DB::Status *status)
+	{
+		DB::Query query;
+		query.query = QString("/%1/%2").arg(Sync::SyncTable::TABLE_NAME, UserSession::getInstance().getUser().login).toStdString();
+		query.body = fetchToJsonWeb(sync);
+
+		return m_webManager.execQuery(query, status);
+	}
+
+	Sync::Entities SyncManagement::fetchFromRecord(const QSqlRecord &record)
+	{
+		Sync::Entities sync;
+		sync.userSync = record.field(Sync::SyncTable::USER_SYNC).value().toLongLong();
+		sync.jobSync = record.field(Sync::SyncTable::JOB_SYNC).value().toLongLong();
+
+		return sync;
+	}
+
+	Sync::Entities SyncManagement::fetchFromRecordWeb(const QJsonObject &records)
+	{
+		Sync::Entities sync;
+		sync.userSync = static_cast<long long>(records[Sync::SyncTable::USER_SYNC].toDouble());
+		sync.jobSync = static_cast<long long>(records[Sync::SyncTable::JOB_SYNC].toDouble());
+
+		return sync;
+	}
+
+	std::string SyncManagement::fetchToJsonWeb(const Sync::Entities &sync)
+	{
+		QJsonObject obj;
+		obj.insert(Sync::SyncTable::USER_SYNC, sync.userSync);
+		obj.insert(Sync::SyncTable::JOB_SYNC, sync.jobSync);
+		QJsonDocument doc(obj);
+
+		return doc.toJson(QJsonDocument::Compact).toStdString();
+	}
 }

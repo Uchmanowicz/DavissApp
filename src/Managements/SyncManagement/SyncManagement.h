@@ -13,31 +13,34 @@
 #include "Models/Sync.h"
 #include "SyncTable.h"
 
-class SyncManagement : public CRUDLocalManagement<std::string, Sync>, public CRUDWebManagement<std::string, Sync>
+namespace Managers
 {
-public:
-	SyncManagement(const QSqlDatabase &database, const std::shared_ptr<WebDatabaseManager> &databaseWeb);
-	~SyncManagement();
+	class SyncManagement : public Templates::CRUDLocalManagement<std::string, Sync::Entities>, public Templates::CRUDWebManagement<std::string, Sync::Entities>
+	{
+	public:
+		SyncManagement(const QSqlDatabase &database, const std::shared_ptr<DB::IWebDbExecutor> &databaseWeb);
+		~SyncManagement();
 
-	Sync select(const std::string &login, DBStatus::StatusType *status = nullptr) const override;
-	std::vector<Sync> selectAll(DBStatus::StatusType *status = nullptr) const override;
-	bool insert(const Sync &localSync, DBStatus::StatusType *status = nullptr) override;
-	bool remove(const Sync &sync, DBStatus::StatusType *status = nullptr) override;
-	bool removeAll(DBStatus::StatusType *status = nullptr) override;
-	bool update(const Sync &localSync, DBStatus::StatusType *status = nullptr) override;
+		Sync::Entities select(const std::string &login, DB::Status *status = nullptr) const override;
+		std::vector<Sync::Entities> selectAll(DB::Status *status = nullptr) const override;
+		bool insert(const Sync::Entities &localSync, DB::Status *status = nullptr) override;
+		bool remove(const Sync::Entities &sync, DB::Status *status = nullptr) override;
+		bool removeAll(DB::Status *status = nullptr) override;
+		bool update(const Sync::Entities &localSync, DB::Status *status = nullptr) override;
 
-	Sync selectWeb(const std::string &login, DBStatus::StatusType *status = nullptr) const override;
-	std::vector<Sync> selectAllWeb(DBStatus::StatusType *status = nullptr) const override;
-	bool insertWeb(const Sync &webSync, DBStatus::StatusType *status = nullptr) override;
-	bool removeWeb(const Sync &webSync, DBStatus::StatusType *status = nullptr) override;
-	bool removeAllWeb(DBStatus::StatusType *status = nullptr) override;
-	bool updateWeb(const Sync &webSync, DBStatus::StatusType *status = nullptr) override;
+		Sync::Entities selectWeb(const std::string &login, DB::Status *status = nullptr) const override;
+		std::vector<Sync::Entities> selectAllWeb(DB::Status *status = nullptr) const override;
+		bool insertWeb(const Sync::Entities &webSync, DB::Status *status = nullptr) override;
+		bool removeWeb(const Sync::Entities &webSync, DB::Status *status = nullptr) override;
+		bool removeAllWeb(DB::Status *status = nullptr) override;
+		bool updateWeb(const Sync::Entities &webSync, DB::Status *status = nullptr) override;
 
-private:
-	LocalManagement m_localManager;
-	WebManagement m_webManager;
+	private:
+		DB::LocalManagement m_localManager;
+		WebManagement m_webManager;
 
-	static Sync fetchFromRecord(const QSqlRecord &record);
-	static Sync fetchFromRecordWeb(const QJsonObject &records);
-	static std::string fetchToJsonWeb(const Sync &sync);
-};
+		static Sync::Entities fetchFromRecord(const QSqlRecord &record);
+		static Sync::Entities fetchFromRecordWeb(const QJsonObject &records);
+		static std::string fetchToJsonWeb(const Sync::Entities &sync);
+	};
+}

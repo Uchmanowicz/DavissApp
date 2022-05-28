@@ -1,5 +1,9 @@
 #include "Application.h"
 
+using namespace Managers;
+using namespace Controllers;
+using namespace Person;
+
 Application::Application(int &argc, char **argv)
 	: QGuiApplication(argc, argv)
 {
@@ -20,8 +24,9 @@ void Application::init()
 	createJobController();
 	createDepotController();
 
-	initUIEngine();
 	assignListeners();
+
+	initUIEngine();
 	initStartUpSettings();
 
 	controllerPack.jobController->fake();
@@ -42,8 +47,8 @@ void Application::createRepositories()
 	qDebug() << "Database LOCALIZATION: "
 			 << QStandardPaths::writableLocation(QStandardPaths::DataLocation) + "/Daviss.db";
 
-	webDatabase = std::make_shared<WebDatabaseManager>(domain.c_str());
-	database = std::make_shared<SqliteDatabaseManager>(localDatabasePath.c_str());
+	webDbExecutor = std::make_shared<DB::WebMySqlDbExecutor>(domain.c_str());
+	dbExecutor = std::make_shared<DB::SqliteDbExecutor>(localDatabasePath.c_str());
 }
 
 void Application::createSynchronizer()
@@ -53,11 +58,11 @@ void Application::createSynchronizer()
 
 void Application::createManagers()
 {
-	localManagement = std::make_shared<LocalManagement>(*database);
-	webManagement = std::make_shared<WebManagement>(webDatabase);
+	localManagement = std::make_shared<DB::LocalManagement>(*dbExecutor);
+	webManagement = std::make_shared<WebManagement>(webDbExecutor);
 
-	managementPack.appManager = std::make_shared<AppManagement>(*database);
-	managementPack.userManager = std::make_shared<UserManagement>(*database, webDatabase);
+	managementPack.appManager = std::make_shared<AppManagement>(*dbExecutor);
+	managementPack.userManager = std::make_shared<UserManagement>(*dbExecutor, webDbExecutor);
 	managementPack.jobManager = std::make_shared<JobManagement>(localManagement, webManagement);
 	managementPack.depotManager = std::make_shared<Managers::DepotManager>(localManagement, webManagement);
 	//	managementPack.syncManager = std::make_shared<SyncManagement>(*database, webDatabase);
@@ -81,9 +86,9 @@ void Application::createUserController()
 
 void Application::createModulesController()
 {
-	std::vector<Module> modules;
-	modules.push_back(Module("Job", "Job Timing1", true));
-	modules.push_back(Module("Depot", "Depot", true));
+	std::vector<Modules::Module> modules;
+	modules.push_back(Modules::Module("Job", "Job Timing1", true));
+	modules.push_back(Modules::Module("Depot", "Depot", true));
 	//	modules.push_back(Module("Job", "Job Timing3", true));
 	//	modules.push_back(Module("Job", "Job Timing4", true));
 	//	modules.push_back(Module("Job", "Job Timing5", true));
@@ -118,9 +123,9 @@ void Application::createDepotController()
 
 void Application::initUITypes()
 {
-	qRegisterMetaType<User>("User");
-	qRegisterMetaType<App>("App");
-	qRegisterMetaType<Time>("Time");
+	qRegisterMetaType<Person::User>("User");
+	qRegisterMetaType<App::Settings>("App");
+	qRegisterMetaType<Chrono::Time>("Time");
 
 	qRegisterMetaType<QVector<Depot::Item>>("QVector<Depot::Item>");
 	qRegisterMetaType<QMap<int, QVector<QString>>>("QMap<int, QVector<QString>>");
@@ -128,8 +133,8 @@ void Application::initUITypes()
 	//	qRegisterMetaType<User::UserRole>("User::UserRole");
 	//	qRegisterMetaType<UserController::LoginStatus>("UserCOntroller::LoginStatus");
 
-	qmlRegisterUncreatableType<User>("ui.types", 1, 0, "User", "Error during register type User");
-	qmlRegisterUncreatableType<App>("ui.types", 1, 0, "App", "Error during register type User");
+	qmlRegisterUncreatableType<Person::User>("ui.types", 1, 0, "User", "Error during register type User");
+	qmlRegisterUncreatableType<App::Settings>("ui.types", 1, 0, "App", "Error during register type User");
 	qmlRegisterUncreatableType<UserController>(
 		"ui.types",
 		1,

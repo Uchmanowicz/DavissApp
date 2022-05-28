@@ -1,12 +1,15 @@
 #include "UserSession.h"
 
+using namespace Listeners;
+using namespace Person;
+
 const User &UserSession::getUser() const
 {
 	if(isActive()) {
 		return *currentUser;
 	}
 
-	return dummyUser;
+	return {dummyUser};
 }
 
 void UserSession::setUser(const User &user)

@@ -14,12 +14,12 @@ namespace Depot
 		static constexpr auto KEY_UNIT = "unit";
 
 	public:
-		static QJsonObject toJson(const Item::Parameter &data);
-		static QJsonArray toJson(const QMap<DataName, Item::Parameter> &dataMap);
-		static QString toJsonString(const QMap<DataName, Item::Parameter> &dataMap);
-		static Item::Parameter fromJson(const QJsonObject &dataJson);
-		static QMap<DataName, Item::Parameter> fromJson(const QJsonArray &dataJson);
-		static Item::Parameter fromJsonString(const QString &dataString);
+		static QJsonObject toJson(const Parameter &data);
+		static QJsonArray toJson(const QMap<DataName, Parameter> &dataMap);
+		static QString toJsonString(const QMap<DataName, Parameter> &dataMap);
+		static Parameter fromJson(const QJsonObject &dataJson);
+		static QMap<DataName, Parameter> fromJson(const QJsonArray &dataJson);
+		static Parameter fromJsonString(const QString &dataString);
 
 	private:
 		static bool validateJson(const QJsonObject &json);

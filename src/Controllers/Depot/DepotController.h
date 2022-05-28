@@ -10,9 +10,6 @@
 #include "Managements/Depot/DepotManager.h"
 #include "Resources/DatabaseStatus.h"
 
-using namespace Depot;
-using namespace Managers;
-
 namespace Listeners
 {
 	class IDepotListener
@@ -26,7 +23,7 @@ namespace Listeners
 namespace Controllers
 {
 
-	class DepotController : public QObject, public Publisher<Listeners::IDepotListener>, public IUserListener
+	class DepotController : public QObject, public Templates::Publisher<Listeners::IDepotListener>, public Listeners::IUserListener
 	{
 		Q_OBJECT
 
@@ -34,11 +31,11 @@ namespace Controllers
 		Q_PROPERTY(QVector<Depot::Item> ui_depotItems MEMBER depotItems NOTIFY depotChanged)
 		Q_PROPERTY(QVariantMap ui_categoriesLevelMap MEMBER categoriesLevelMap NOTIFY depotChanged)
 
-		explicit DepotController(const std::shared_ptr<DepotManager> &_depotManager,
+		explicit DepotController(const std::shared_ptr<Managers::DepotManager> &_depotManager,
 								 QObject *parent = nullptr);
 		~DepotController() = default;
 
-		virtual void onUserChanged(const User &user) override;
+		virtual void onUserChanged(const Person::User &user) override;
 
 		Q_INVOKABLE void addItem(const QString &name, const QString &category);
 
@@ -49,7 +46,7 @@ namespace Controllers
 		void depotChanged();
 
 	private:
-		std::shared_ptr<DepotManager> depotManager;
+		std::shared_ptr<Managers::DepotManager> depotManager;
 
 		void loadDepotItems();
 		void emitDepotChanged();

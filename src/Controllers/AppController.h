@@ -9,38 +9,42 @@
 #include "Managements/AppManagement/AppManagement.h"
 #include "Resources/DatabaseStatus.h"
 
-struct IAppListener
+namespace Listeners
 {
-	virtual ~IAppListener() {}
-	virtual void onAppChanged(const App &app) = 0;
-};
+	struct IAppListener
+	{
+		virtual ~IAppListener() { }
+		virtual void onAppChanged(const App::Settings &app) = 0;
+	};
+}
 
-class AppController : public QObject, public Publisher<IAppListener>
+namespace Controllers
 {
-	Q_OBJECT
+	class AppController : public QObject, public Templates::Publisher<Listeners::IAppListener>
+	{
+		Q_OBJECT
 
-public:
-	Q_PROPERTY(App ui_app MEMBER currentApp NOTIFY appChanged)
+	public:
+		Q_PROPERTY(App::Settings ui_app MEMBER currentApp NOTIFY appChanged)
 
-	explicit AppController(const std::shared_ptr<AppManagement> &appManagement_,
-													QObject *parent = nullptr);
-	~AppController();
+		explicit AppController(const std::shared_ptr<Managers::AppManagement> &appManagement_,
+							   QObject *parent = nullptr);
+		~AppController();
 
-	Q_INVOKABLE void changeAppearance(const App::Appearance &appearance);
-	Q_INVOKABLE void changeSynchronizing(const bool &enabled);
+		Q_INVOKABLE void changeAppearance(const App::Settings::Appearance &appearance);
+		Q_INVOKABLE void changeSynchronizing(const bool &enabled);
 
-	void loadAppSettings();
+		void loadAppSettings();
 
-	App currentApp;
+		App::Settings currentApp;
 
-signals:
-	void appChanged();
+	signals:
+		void appChanged();
 
-private:
-	std::shared_ptr<AppManagement> manager;
+	private:
+		std::shared_ptr<Managers::AppManagement> manager;
 
-	void setDefaultSettingsOnFirstLaunch();
-	void emitAppChanged();
-};
-
-
+		void setDefaultSettingsOnFirstLaunch();
+		void emitAppChanged();
+	};
+}

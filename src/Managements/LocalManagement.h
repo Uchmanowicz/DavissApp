@@ -8,18 +8,21 @@
 
 #include "Templates/CRUDRepository.h"
 
-class LocalManagement : CRUDLocalRepository
+namespace DB
 {
-public:
-	LocalManagement(const QSqlDatabase &database);
-	~LocalManagement();
+	class LocalManagement : Templates::CRUDLocalRepository
+	{
+	public:
+		LocalManagement(const QSqlDatabase &database);
+		~LocalManagement();
 
-	QSqlRecord getRecord(const Query &query, DBStatus::StatusType *status = nullptr) const override;
-	std::vector<QSqlRecord> getRecords(const Query &query, DBStatus::StatusType *status = nullptr) const override;
-	bool execQuery(const Query &query, DBStatus::StatusType *status = nullptr) const override;
+		QSqlRecord getRecord(const DB::Query &query, DB::Status *status = nullptr) const override;
+		std::vector<QSqlRecord> getRecords(const DB::Query &query, DB::Status *status = nullptr) const override;
+		bool execQuery(const DB::Query &query, DB::Status *status = nullptr) const override;
 
-private:
-	QSqlDatabase m_database;
+	private:
+		QSqlDatabase m_database;
 
-	void fetchError(const QSqlError &sqlErr, DBStatus::StatusType *status = nullptr) const;
-};
+		void fetchError(const QSqlError &sqlErr, DB::Status *status = nullptr) const;
+	};
+}

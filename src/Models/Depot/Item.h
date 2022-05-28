@@ -9,29 +9,29 @@ namespace Depot
 {
 	typedef QString DataName;
 
+	struct Parameter
+	{
+		QString name = "";
+		QString value = "";
+		QString unit = "";
+
+		Parameter() = default;
+		Parameter(const QString &_name, const QString &_value, const QString &_unit)
+			: name(_name), value(_value), unit(_unit)
+		{ }
+
+		QString toString() const
+		{
+			return QString(name + value + unit);
+		}
+
+		bool operator==(const Parameter &other) const = default;
+	};
+
 	class Item
 	{
 		Q_GADGET
 	public:
-		struct Parameter
-		{
-			QString name = "";
-			QString value = "";
-			QString unit = "";
-
-			Parameter() { }
-			Parameter(const QString &_name, const QString &_value, const QString &_unit)
-				: name(_name), value(_value), unit(_unit)
-			{ }
-
-			QString toString() const
-			{
-				return QString(name + value + unit);
-			}
-
-			bool operator==(const Parameter &other) const = default;
-		};
-
 		Q_PROPERTY(QString ui_login MEMBER login);
 		Q_PROPERTY(QString ui_category MEMBER category);
 		Q_PROPERTY(long long ui_amount MEMBER amount);
@@ -66,4 +66,4 @@ namespace Depot
 	};
 }
 Q_DECLARE_METATYPE(Depot::Item)
-Q_DECLARE_METATYPE(Depot::Item::Parameter)
+Q_DECLARE_METATYPE(Depot::Parameter)

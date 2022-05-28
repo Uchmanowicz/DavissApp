@@ -1,15 +1,14 @@
 #pragma once
 
 #include "Templates/SynchronizerHandler.h"
-
-struct SynchronizerPublisherList : public Publisher<IUserSync>, public Publisher<IJobSync>
+namespace Sync
 {
-	~SynchronizerPublisherList() {}
-	using Publisher<IUserSync>::addListener;
-	using Publisher<IUserSync>::removeListener;
-	using Publisher<IJobSync>::addListener;
-	using Publisher<IJobSync>::removeListener;
-
-};
-
-
+	struct SynchronizerPublisherList : public Templates::Publisher<Listeners::IUserSync>, public Templates::Publisher<Listeners::IJobSync>
+	{
+		~SynchronizerPublisherList() { }
+		using Templates::Publisher<Listeners::IUserSync>::addListener;
+		using Templates::Publisher<Listeners::IUserSync>::removeListener;
+		using Templates::Publisher<Listeners::IJobSync>::addListener;
+		using Templates::Publisher<Listeners::IJobSync>::removeListener;
+	};
+}

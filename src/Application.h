@@ -13,9 +13,10 @@
 
 #include "Common/Cryptographic_PROTECTED.h"
 
-#include "Resources/DatabaseManager.h"
-#include "Resources/PhpApiCrud/WebDatabaseManager.h"
-#include "Resources/Sqlite/SqliteDatabaseManager.h"
+#include "Resources/ILocalDbExecutor.h"
+#include "Resources/IWebDbExecutor.h"
+#include "Resources/Mysql/WebMySqlDbExecutor.h"
+#include "Resources/Sqlite/SqliteDbExecutor.h"
 
 #include "Managements/LocalManagement.h"
 #include "Managements/WebManagement.h"
@@ -28,24 +29,30 @@
 
 //#include "Services/Synchronizer.h"
 
-struct ManagementPack
+namespace Managers
 {
-	std::shared_ptr<AppManagement> appManager;
-	std::shared_ptr<UserManagement> userManager;
-	std::shared_ptr<JobManagement> jobManager;
-	std::shared_ptr<Managers::DepotManager> depotManager;
+	struct ManagementPack
+	{
+		std::shared_ptr<Managers::AppManagement> appManager;
+		std::shared_ptr<Managers::UserManagement> userManager;
+		std::shared_ptr<Managers::JobManagement> jobManager;
+		std::shared_ptr<Managers::DepotManager> depotManager;
 
-	//	std::shared_ptr<SyncManagement> syncManager;
-};
+		//	std::shared_ptr<SyncManagement> syncManager;
+	};
+}
 
-struct ControllerPack
+namespace Controllers
 {
-	std::shared_ptr<AppController> appController;
-	std::shared_ptr<UserController> userController;
-	std::shared_ptr<ModulesController> modulesController;
-	std::shared_ptr<JobController> jobController;
-	std::shared_ptr<Controllers::DepotController> depotController;
-};
+	struct ControllerPack
+	{
+		std::shared_ptr<Controllers::AppController> appController;
+		std::shared_ptr<Controllers::UserController> userController;
+		std::shared_ptr<Controllers::ModulesController> modulesController;
+		std::shared_ptr<Controllers::JobController> jobController;
+		std::shared_ptr<Controllers::DepotController> depotController;
+	};
+}
 
 class Application : public QGuiApplication
 {
@@ -76,14 +83,14 @@ private:
 
 	std::string localDatabasePath;
 	std::string domain;
-	std::shared_ptr<DatabaseManager> database;
-	std::shared_ptr<WebDatabaseManager> webDatabase;
+	std::shared_ptr<DB::ILocalDbExecutor> dbExecutor;
+	std::shared_ptr<DB::IWebDbExecutor> webDbExecutor;
 
-	std::shared_ptr<LocalManagement> localManagement;
+	std::shared_ptr<DB::LocalManagement> localManagement;
 	std::shared_ptr<WebManagement> webManagement;
 
-	ManagementPack managementPack;
-	ControllerPack controllerPack;
+	Managers::ManagementPack managementPack;
+	Controllers::ControllerPack controllerPack;
 
 	//	std::shared_ptr<Synchronizer> synchronizer;
 };

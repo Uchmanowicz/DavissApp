@@ -2,14 +2,14 @@
 
 namespace Depot
 {
-	QJsonObject ParameterParser::toJson(const Item::Parameter &data)
+	QJsonObject ParameterParser::toJson(const Parameter &data)
 	{
 		return QJsonObject {{KEY_NAME, data.name},
 							{KEY_VALUE, data.value},
 							{KEY_UNIT, data.unit}};
 	}
 
-	QJsonArray ParameterParser::toJson(const QMap<DataName, Item::Parameter> &dataMap)
+	QJsonArray ParameterParser::toJson(const QMap<DataName, Parameter> &dataMap)
 	{
 		QJsonArray arr;
 		for(const auto &item: dataMap) {
@@ -18,24 +18,24 @@ namespace Depot
 		return arr;
 	}
 
-	QString ParameterParser::toJsonString(const QMap<DataName, Item::Parameter> &dataMap)
+	QString ParameterParser::toJsonString(const QMap<DataName, Parameter> &dataMap)
 	{
 		QJsonDocument doc;
 		doc.setArray(toJson(dataMap));
 		return doc.toJson();
 	}
 
-	Item::Parameter ParameterParser::fromJson(const QJsonObject &dataJson)
+	Parameter ParameterParser::fromJson(const QJsonObject &dataJson)
 	{
 		if(!validateJson(dataJson)) {
 		}
 
-		return Item::Parameter(dataJson[KEY_NAME].toString(), dataJson[KEY_VALUE].toString(), dataJson[KEY_UNIT].toString());
+		return Parameter(dataJson[KEY_NAME].toString(), dataJson[KEY_VALUE].toString(), dataJson[KEY_UNIT].toString());
 	}
 
-	QMap<DataName, Item::Parameter> ParameterParser::fromJson(const QJsonArray &dataJson)
+	QMap<DataName, Parameter> ParameterParser::fromJson(const QJsonArray &dataJson)
 	{
-		QMap<DataName, Item::Parameter> dataMap;
+		QMap<DataName, Parameter> dataMap;
 		for(const auto &dataVal: dataJson) {
 			const auto data = fromJson(dataVal.toObject());
 			dataMap.insert(data.name, data);
@@ -43,7 +43,7 @@ namespace Depot
 		return dataMap;
 	}
 
-	Item::Parameter ParameterParser::fromJsonString(const QString &dataString)
+	Parameter ParameterParser::fromJsonString(const QString &dataString)
 	{
 		QJsonDocument doc = QJsonDocument::fromJson(dataString.toUtf8());
 		if(doc.isObject()) {

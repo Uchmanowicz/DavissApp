@@ -1,5 +1,10 @@
 #include "DepotController.h"
 
+using namespace Depot;
+using namespace Managers;
+using namespace Person;
+using namespace DB;
+
 namespace Controllers
 {
 	DepotController::DepotController(const std::shared_ptr<DepotManager> &_depotManager,
@@ -10,7 +15,7 @@ namespace Controllers
 
 	void DepotController::loadDepotItems()
 	{
-		DBStatus::StatusType dbStatus;
+		Status dbStatus;
 		auto items = depotManager->selectAll(&dbStatus);
 		depotItems = QVector<Depot::Item>::fromStdVector(items);
 
@@ -47,7 +52,7 @@ namespace Controllers
 		auto user = UserSession::getInstance().getUser();
 		auto item = Depot::Item(user.login, category, 1, "pcs", "", {});
 
-		DBStatus::StatusType dbStatus;
+		Status dbStatus;
 		depotManager->insert(item, &dbStatus);
 		loadDepotItems();
 		emitDepotChanged();

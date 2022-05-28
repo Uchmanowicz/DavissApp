@@ -1,8 +1,11 @@
 #pragma once
 
-struct AppTable final
+namespace App
 {
-	static constexpr char const *TABLE_NAME = "App";
-	static constexpr char const *APPEARANCE = "Apearance";
-	static constexpr char const *SYNC = "Sync";
-};
+	struct AppTable final
+	{
+		static constexpr char const *TABLE_NAME = "App";
+		static constexpr char const *APPEARANCE = "Apearance";
+		static constexpr char const *SYNC = "Sync";
+	};
+}

@@ -8,10 +8,11 @@
 #include <QStandardPaths>
 #endif
 
-
-class AndroidUtils
+namespace Android
 {
-public:
-	static std::string getRealFilePath(const std::string &path);
-};
-
+	class AndroidUtils
+	{
+	public:
+		static std::string getRealFilePath(const std::string &path);
+	};
+}

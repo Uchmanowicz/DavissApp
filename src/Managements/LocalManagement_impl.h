@@ -2,8 +2,8 @@
 
 ////#include "LocalManagement.h"
 
-//template <typename Obj>
-//LocalManagement<Obj>::LocalManagement(const QSqlDatabase &database)
+// template <typename Obj>
+// LocalManagement<Obj>::LocalManagement(const QSqlDatabase &database)
 //	: m_database(database)
 //{
 //	if(!m_database.isOpen()) {
@@ -11,15 +11,15 @@
 //			fetchError(m_database.lastError());
 //		}
 //	}
-//}
+// }
 
-//template <typename Obj>
-//LocalManagement<Obj>::~LocalManagement()
+// template <typename Obj>
+// LocalManagement<Obj>::~LocalManagement()
 //{
-//}
+// }
 
-//template <typename Obj>
-//QSqlRecord LocalManagement<Obj>::select(const Query &query, DBStatus::StatusType *status) const
+// template <typename Obj>
+// QSqlRecord LocalManagement<Obj>::select(const Query &query, DBDB::StatusType *status) const
 //{
 //	QString sql(query.query.c_str());
 //	QSqlQuery sqlQuery(m_database);
@@ -39,8 +39,8 @@
 //	return QSqlRecord();
 //}
 
-//template <typename Obj>
-//std::vector<QSqlRecord> LocalManagement<Obj>::selectAll(const Query<Obj> &query, DBStatus::StatusType *status) const
+// template <typename Obj>
+// std::vector<QSqlRecord> LocalManagement<Obj>::selectAll(const Query<Obj> &query, DBDB::StatusType *status) const
 //{
 //	QString sql(query.query.c_str());
 //		QSqlQuery sqlQuery(m_database);
@@ -60,8 +60,8 @@
 //		return {};
 //}
 
-//template <typename Obj>
-//bool LocalManagement<Obj>::insert(const Query<Obj> &query, DBStatus::StatusType *status)
+// template <typename Obj>
+// bool LocalManagement<Obj>::insert(const Query<Obj> &query, DBDB::StatusType *status)
 //{
 //		QString sql(query.query.c_str());
 
@@ -78,8 +78,8 @@
 //		return false;
 //}
 
-//template <typename Obj>
-//bool LocalManagement<Obj>::remove(const Query<Obj> &query, DBStatus::StatusType *status)
+// template <typename Obj>
+// bool LocalManagement<Obj>::remove(const Query<Obj> &query, DBDB::StatusType *status)
 //{
 //	QString sql(query.query.c_str());
 //	QSqlQuery sqlQuery(m_database);
@@ -95,8 +95,8 @@
 //	}
 //}
 
-//template <typename Obj>
-//bool LocalManagement<Obj>::removeAll(const Query<Obj> &query, DBStatus::StatusType *status)
+// template <typename Obj>
+// bool LocalManagement<Obj>::removeAll(const Query<Obj> &query, DBDB::StatusType *status)
 //{
 //	QString sql(query.query.c_str());
 //	QSqlQuery sqlQuery(m_database);
@@ -112,8 +112,8 @@
 //	}
 //}
 
-//template <typename Obj>
-//bool LocalManagement<Obj>::update(const Query<Obj> &query, DBStatus::StatusType *status)
+// template <typename Obj>
+// bool LocalManagement<Obj>::update(const Query<Obj> &query, DBDB::StatusType *status)
 //{
 //		QString sql(query.query.c_str());
 //		QSqlQuery sqlQuery(m_database);
@@ -130,8 +130,8 @@
 //		return false;
 //}
 
-//template <typename Obj>
-//void LocalManagement<Obj>::fetchError(const QSqlError &sqlErr, DBStatus::StatusType *status) const
+// template <typename Obj>
+// void LocalManagement<Obj>::fetchError(const QSqlError &sqlErr, DBDB::StatusType *status) const
 //{
 //	switch(sqlErr.type()) {
 //	case QSqlError::NoError:

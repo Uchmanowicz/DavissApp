@@ -1,74 +1,81 @@
 #include "AppManagement.h"
 
-AppManagement::AppManagement(const QSqlDatabase &database)
-	: m_localManager(database)
+using namespace App;
+using namespace Templates;
+using namespace DB;
+
+namespace Managers
 {
-}
-
-AppManagement::~AppManagement()
-{
-}
-
-App AppManagement::select(const std::string &app, DBStatus::StatusType *status) const
-{
-	auto apps = selectAll(status);
-	return apps.front();
-}
-
-std::vector<App> AppManagement::selectAll(DBStatus::StatusType *status) const
-{
-	Query query;
-	query.query = QString("SELECT * FROM %1")
-					  .arg(AppTable::TABLE_NAME)
-					  .toStdString();
-
-	auto reply = m_localManager.getRecords(query, status);
-
-	std::vector<App> apps;
-	for(const auto &app: reply) {
-		apps.push_back(fetchFromRecord(app));
+	AppManagement::AppManagement(const QSqlDatabase &database)
+		: m_localManager(database)
+	{
 	}
 
-	return apps;
-}
+	AppManagement::~AppManagement()
+	{
+	}
 
-bool AppManagement::insert(const App &app, DBStatus::StatusType *status)
-{
-	Query query;
-	query.query = QString("INSERT INTO %1(%2, %3) VALUES('%4', '%5');")
-					  .arg(AppTable::TABLE_NAME, AppTable::APPEARANCE, AppTable::SYNC, QString::number(app.appearance), QString::number(app.sync))
-					  .toStdString();
+	Settings AppManagement::select(const std::string &app, Status *status) const
+	{
+		auto apps = selectAll(status);
+		return apps.front();
+	}
 
-	return m_localManager.execQuery(query, status);
-}
+	std::vector<Settings> AppManagement::selectAll(Status *status) const
+	{
+		DB::Query query;
+		query.query = QString("SELECT * FROM %1")
+						  .arg(AppTable::TABLE_NAME)
+						  .toStdString();
 
-bool AppManagement::remove(const App &app, DBStatus::StatusType *status)
-{
-	return removeAll(status);
-}
+		auto reply = m_localManager.getRecords(query, status);
 
-bool AppManagement::removeAll(DBStatus::StatusType *status)
-{
-	Query query;
-	query.query = QString("DELETE FROM %1;")
-					  .arg(AppTable::TABLE_NAME)
-					  .toStdString();
+		std::vector<Settings> apps;
+		for(const auto &app: reply) {
+			apps.push_back(fetchFromRecord(app));
+		}
 
-	return m_localManager.execQuery(query, status);
-}
+		return apps;
+	}
 
-bool AppManagement::update(const App &app, DBStatus::StatusType *status)
-{
-	removeAll(status);
+	bool AppManagement::insert(const Settings &app, Status *status)
+	{
+		DB::Query query;
+		query.query = QString("INSERT INTO %1(%2, %3) VALUES('%4', '%5');")
+						  .arg(AppTable::TABLE_NAME, AppTable::APPEARANCE, AppTable::SYNC, QString::number(app.appearance), QString::number(app.sync))
+						  .toStdString();
 
-	return insert(app, status);
-}
+		return m_localManager.execQuery(query, status);
+	}
 
-App AppManagement::fetchFromRecord(const QSqlRecord &record)
-{
-	App app;
-	app.appearance = static_cast<App::Appearance>(record.field(AppTable::APPEARANCE).value().toInt(0));
-	app.sync = record.field(AppTable::SYNC).value().toBool();
+	bool AppManagement::remove(const Settings &app, Status *status)
+	{
+		return removeAll(status);
+	}
 
-	return app;
+	bool AppManagement::removeAll(Status *status)
+	{
+		DB::Query query;
+		query.query = QString("DELETE FROM %1;")
+						  .arg(AppTable::TABLE_NAME)
+						  .toStdString();
+
+		return m_localManager.execQuery(query, status);
+	}
+
+	bool AppManagement::update(const Settings &app, Status *status)
+	{
+		removeAll(status);
+
+		return insert(app, status);
+	}
+
+	Settings AppManagement::fetchFromRecord(const QSqlRecord &record)
+	{
+		Settings app;
+		app.appearance = static_cast<Settings::Appearance>(record.field(AppTable::APPEARANCE).value().toInt(0));
+		app.sync = record.field(AppTable::SYNC).value().toBool();
+
+		return app;
+	}
 }

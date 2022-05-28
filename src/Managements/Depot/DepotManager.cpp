@@ -1,6 +1,8 @@
 #include "DepotManager.h"
 
 using namespace Depot;
+using namespace Person;
+using namespace DB;
 
 namespace Managers
 {
@@ -9,9 +11,9 @@ namespace Managers
 	{
 	}
 
-	Depot::Item DepotManager::select(const std::string &login, DBStatus::StatusType *status) const
+	Depot::Item DepotManager::select(const std::string &login, Status *status) const
 	{
-		Query query;
+		DB::Query query;
 		query.query = QString("SELECT * FROM %1 WHERE %2 = '%3';")
 						  .arg(DepotTable::TABLE_NAME, DepotTable::LOGIN, login.c_str())
 						  .toStdString();
@@ -25,9 +27,9 @@ namespace Managers
 		return Depot::Item();
 	}
 
-	std::vector<Depot::Item> DepotManager::selectAll(DBStatus::StatusType *status) const
+	std::vector<Depot::Item> DepotManager::selectAll(Status *status) const
 	{
-		Query query;
+		DB::Query query;
 		query.query = QString("SELECT * FROM %1;")
 						  .arg(DepotTable::TABLE_NAME)
 						  .toStdString();
@@ -42,9 +44,9 @@ namespace Managers
 		return DepotItems;
 	}
 
-	bool DepotManager::insert(const Depot::Item &depotItem, DBStatus::StatusType *status)
+	bool DepotManager::insert(const Depot::Item &depotItem, Status *status)
 	{
-		Query query;
+		DB::Query query;
 		query.query = QString("INSERT INTO %1(%2, %3, %4, %5, %6, %7, %8) VALUES('%9', '%10', '%11', '%12', '%13', '%14', '%15');")
 						  .arg(DepotTable::TABLE_NAME, DepotTable::LOGIN, DepotTable::AMOUNT, DepotTable::UNIT, DepotTable::CATEGORY, DepotTable::LOCALIZATION, DepotTable::PARAMETERS, DepotTable::ID)
 						  .arg(depotItem.login, QString::number(depotItem.amount), depotItem.unit, depotItem.category, depotItem.localization, Depot::ParameterParser::toJsonString(depotItem.parameters), depotItem.getID())
@@ -53,9 +55,9 @@ namespace Managers
 		return m_localManager->execQuery(query, status);
 	}
 
-	bool DepotManager::remove(const Depot::Item &depotItem, DBStatus::StatusType *status)
+	bool DepotManager::remove(const Depot::Item &depotItem, Status *status)
 	{
-		Query query;
+		DB::Query query;
 		query.query = QString("DELETE FROM %1 WHERE %2 = '%3';")
 						  .arg(DepotTable::TABLE_NAME, DepotTable::ID, depotItem.getID())
 						  .toStdString();
@@ -63,9 +65,9 @@ namespace Managers
 		return m_localManager->execQuery(query, status);
 	}
 
-	bool DepotManager::removeAll(DBStatus::StatusType *status)
+	bool DepotManager::removeAll(Status *status)
 	{
-		Query query;
+		DB::Query query;
 		query.query = QString("DELETE FROM %1 WHERE %2 = '%3';")
 						  .arg(DepotTable::TABLE_NAME, DepotTable::LOGIN, UserSession::getInstance().getUser().login)
 						  .toStdString();
@@ -73,9 +75,9 @@ namespace Managers
 		return m_localManager->execQuery(query, status);
 	}
 
-	bool DepotManager::update(const Depot::Item &depotItem, DBStatus::StatusType *status)
+	bool DepotManager::update(const Depot::Item &depotItem, Status *status)
 	{
-		Query query;
+		DB::Query query;
 		query.query = QString("UPDATE %1 SET %2='%3', %4='%5', %6='%7', %8='%9', %10='%11' WHERE %12 = '%13';")
 						  .arg(DepotTable::TABLE_NAME, DepotTable::CATEGORY, depotItem.category, DepotTable::AMOUNT, QString::number(depotItem.amount), DepotTable::UNIT, depotItem.unit)
 						  .arg(DepotTable::LOCALIZATION, depotItem.localization, DepotTable::PARAMETERS, Depot::ParameterParser::toJsonString(depotItem.parameters), DepotTable::ID, depotItem.getID())
@@ -84,9 +86,9 @@ namespace Managers
 		return m_localManager->execQuery(query, status);
 	}
 
-	Depot::Item DepotManager::selectWeb(const std::string &login, DBStatus::StatusType *status) const
+	Depot::Item DepotManager::selectWeb(const std::string &login, Status *status) const
 	{
-		Query query;
+		DB::Query query;
 		query.query = QString("/%1/%2").arg(DepotTable::TABLE_NAME, login.c_str()).toStdString();
 
 		auto reply = m_webManager->getRecord(query, status);
@@ -98,9 +100,9 @@ namespace Managers
 		return Depot::Item();
 	}
 
-	std::vector<Depot::Item> DepotManager::selectAllWeb(DBStatus::StatusType *status) const
+	std::vector<Depot::Item> DepotManager::selectAllWeb(Status *status) const
 	{
-		Query query;
+		DB::Query query;
 		query.query = QString("/%1?filter=%2,eq,%3").arg(DepotTable::TABLE_NAME, DepotTable::LOGIN, UserSession::getInstance().getUser().login).toStdString();
 
 		auto reply = m_webManager->getRecords(query, status);
@@ -113,32 +115,32 @@ namespace Managers
 		return depotItems;
 	}
 
-	bool DepotManager::insertWeb(const Depot::Item &DepotItem, DBStatus::StatusType *status)
+	bool DepotManager::insertWeb(const Depot::Item &DepotItem, Status *status)
 	{
-		Query query;
+		DB::Query query;
 		query.query = QString("/%1").arg(DepotTable::TABLE_NAME).toStdString();
 		query.body = fetchToJsonWeb(DepotItem);
 
 		return m_webManager->execQuery(query, status);
 	}
 
-	bool DepotManager::removeWeb(const Depot::Item &DepotItem, DBStatus::StatusType *status)
+	bool DepotManager::removeWeb(const Depot::Item &DepotItem, Status *status)
 	{
-		Query query;
+		DB::Query query;
 		query.query = QString("/%1/%2").arg(DepotTable::TABLE_NAME, DepotItem.login).toStdString();
 
 		return m_webManager->execQuery(query, status);
 	}
 
-	bool DepotManager::removeAllWeb(DBStatus::StatusType *status)
+	bool DepotManager::removeAllWeb(Status *status)
 	{
 		return 0;
 	}
 
-	bool DepotManager::updateWeb(const Depot::Item &DepotItem, DBStatus::StatusType *status)
+	bool DepotManager::updateWeb(const Depot::Item &DepotItem, Status *status)
 	{
 		auto qrTxt = QString("/%1/%2").arg(DepotTable::TABLE_NAME, DepotItem.login).toStdString();
-		Query query(qrTxt, fetchToJsonWeb(DepotItem), Query::UPDATE);
+		DB::Query query(qrTxt, fetchToJsonWeb(DepotItem), DB::Query::UPDATE);
 
 		return m_webManager->execQuery(query, status);
 	}

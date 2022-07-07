@@ -22,9 +22,9 @@ Project is: **_in progress_** - daily work make progress.
 >**Project before first release.**
 
 ## Screenshots
-Menu View | Settings View | UserInfo View | User settings
---------- | ------------- | ------------- | ----------
-<img src="./docs/images/ss_menuView.JPG" width="200"> | <img src="./docs/images/ss_settingsView.JPG" width="200"> | <img src="./docs/images/ss_settingsViewUser.JPG" width="200"> | <img src="./docs/images/ss_settingsViewUserAvatar.JPG" width="200"> <img src="./docs/images/ss_settingsViewUserName.JPG" width="200">
+Menu View | Settings View | UserInfo View | Avatar changing | Name changing
+--------- | ------------- | ------------- | ---------- | ----------
+<img src="./docs/images/ss_menuView.JPG" width="200"> | <img src="./docs/images/ss_settingsView.JPG" width="200"> | <img src="./docs/images/ss_settingsViewUser.JPG" width="200"> | <img src="./docs/images/ss_settingsViewUserAvatar.JPG" width="200"> | <img src="./docs/images/ss_settingsViewUserName.JPG" width="200">
 
 
 ## Technologies
